@@ -118,7 +118,7 @@ def publish(arg):
                             <div id='left-content'>
                                 <div class='entry'>
                                     <div id = 'content'>
-    <?php include '{blogcontent_path}/{filename}.content.php';?>
+<?php include '{blogcontent_path}/{filename}.content.php';?>
                                         <br>
                                         <small>
                                         <?php
@@ -148,12 +148,12 @@ def publish(arg):
             insert_string = """
                                                     <li>
                                                             <?php
-                                                                $filename = '""" + blog_path + filename + """.php';
+                                                                $filename = '""" + blog_path + "/" + filename + """.php';
                                                                 if(file_exists($filename)) {
                                                                     echo date("F d Y H:i:s.", filectime($filename));
                                                                 }
                                                             ?>
-                                                            &ndash; <a href=\"""" + blog_absolute_path + filename + """.php">""" + name + """</a>
+                                                            &ndash; <a href=\"""" + blog_absolute_path + "/" + filename + """.php">""" + name + """</a>
                                                     </li>
                                                 """
             with open(blog_index_page, 'r+') as fd:
@@ -173,7 +173,7 @@ def publish(arg):
             <item>
                 <title>{name}</title>
                 <link>{url}/{fname}.php</link>
-                <description>{rss_description}</description> 
+                <description>{rss_description}</description>
                 <author>{author}</author>
             </item>
                 """
