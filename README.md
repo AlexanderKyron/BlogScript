@@ -1,35 +1,37 @@
 # Alex Kyron's Blog Script
 Python blog script inspired by Luke Smith's lb (https://github.com/LukeSmithxyz/lb)
-## Why not just use lb?
-Well, a few reasons.
-
-1. I didn't find it particularly elegant to go through and modify.
-
-My website has some specific needs with how I format the blog pages, especially with the rolling blog page; this is because it has a consistent theme in which entries are separated into boxes.
-The way the site works uses a lot of PHP includes and a decent amount of extra markup on blog insertion. It also uses markdown for formatting blogs. For these reasons, rather than try to modify his bash script, I decided to write a much simpler program.
-
-It also makes it more helpful for people trying to set up their own blogs; if your site supports PHP as mine does, then all you have to do to make this script fit perfectly is adjust the markup in the insert_text variables.
-
-Rather than mess about with lb, I found it easier to just write myself an alternative that is custom fit to the way my site works.
-
-
-2. I don't like Luke Smith.
-
-This is really petty, but hopefully understandable. I enjoy his content and a lot of his philosophy, however, I cannot get behind reactionary politics, and it feels awkward to use his script and shout him out on my website for it. It'd feel wrong to use his tools and not give credit, and it also feels wrong to associate myself with his name.
-
-
-3. I like Python better than shell scripting for this stuff.
-
-While bash is certainly fully capable for what this does, lb feels like it's doing a lot more than it needs to, and reading its source feels awkward as it is calling upon so many different tools. While it's efficient and understandable to do so, this just felt more fitting to the task.
-
-
-4. I wanted to.
-
-I don't have ANY of my python projects on my Github, so it seemed like a good opportunity just to get something done and throw it up on here.
 ## How do I set it up?
-1. Place the script in the root of your website.
-2. Make files blog.php, blog_index.php and populate them with all your page boilerplate and whatnot, then include the comment <!--ab--> where the inserted content should go upon publishing a page
-3. Make a /blog and a /blog/blogcontent directory
-4. Run the script with -n to create a blog post, then -p to publish it
-5. ???
-6. Profit
+
+1. Change path variables to your equivalent directories as described in comments or create the folders
+
+2. Add <!--ab--> (or change match_string to your own comment) where you want the rolling content inserted
+in your rolling blog page, links inserted in the index page, and updates inserted in RSS
+
+3. Modify insert_string in the publish() method to match your markup; by default this is my site's markup and
+yours will not match. Also, when it creates a new file, it uses markdown for the heading, which you may not have
+on your site. Change markdown to false in the global variables to make it spit out HTML instead.
+
+Edit the RSS settings. Please don't leave my info in there.
+
+4. Copy this script to the root of your site with your blog.php and blog_index.php pages
+(can also be HTML if your edited strings have no php in them)
+
+5. Run python3 ab.py -n <name> to create a blog post. It will save a content file in
+/blog/blogcontent/<name>.php (with all spaces changed to hyphens, all quotes removed, all lowercase for easy
+URLs).
+
+6. When done editing the post, run python3 ab.py -p <name> to publish your post. This will add a section to your
+rolling blog and a link to your index, and update your RSS feed automagically.
+
+#  Configuration
+Configuring this script is done through editing source code. The paths are all stored in clear variables at the top and 
+there are booleans for disabling features.
+
+## Why not just use lb?
+This is python, easier to configure and modify to adapt to more complex sites, simpler and serves the same functionality.
+It's also cross-platform, with the only dependency being Vim, as opposed to lb being a bash script requiring every GNU 
+tool under the sun. If your website server runs on a Windows box, you're out of luck.
+
+lb is an amazing tool and I think Luke Smith had the right idea while making it. As much as I disagree with his politics,
+he is very talented. My site simply wasn't a good fit for the script and re-jigging it to do what I wanted proved more 
+annoying than just writing a new one, and I figured it's a useful enough tool to keep supporting and make public.
