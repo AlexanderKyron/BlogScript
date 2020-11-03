@@ -38,7 +38,7 @@ def publish(arg):
     if path.exists("./blog/blogcontent/" + filename + ".content.php"):
         f = open("./blog/" + filename + ".php", "w");
         f.write(
-            "<?php include('blogheader.php);\ninclude('./blogcontent/" + filename + ".content.php');\ninclude('blogfooter.php');?>")
+            "<?php include('blogheader.php');\ninclude('./blogcontent/" + filename + ".content.php');\ninclude('blogfooter.php');?>")
         f.close();
         insert_string = """
                         <div id='left-content'>
