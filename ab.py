@@ -29,7 +29,7 @@ def new_post(arg):
     name = arg;
     filename = fname(name)
     f = open("./blog/blogcontent/" + filename + ".content.php", "w")
-    f.write("## " + name)
+    f.write("## [" + name + "](/blog/"+filename+".php)")
     f.close()
     os.system("vim ./blog/blogcontent/"+filename+".content.php")
 def publish(arg):
