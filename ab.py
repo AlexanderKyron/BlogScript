@@ -1,7 +1,10 @@
-import sys, getopt, subprocess, pdb
-from os import path
+import getopt
 import os
+import sys
+from os import path
+
 match_string = "<!--ab-->"
+
 
 def main(argv):
     try:
@@ -14,31 +17,36 @@ def main(argv):
             help()
             sys.exit(0)
         elif opt in ("-n", "--new"):
-               new_post(arg)
+            new_post(arg)
         elif opt in ("-p", "--publish"):
             publish(arg)
-        elif opt in ('e','--edit'):
+        elif opt in ('e', '--edit'):
             filename = fname(arg)
-            os.system("vim ./blog/blogcontent/"+filename+".content.php")
+            os.system(f"vim ./blog/blogcontent/{filename}.content.php")
 
 
 def help():
     print(
-        'Alex Kyron\'s Blogging script. \nNew Post\tab -n (--new) <name>\nEdit post\tab -e (--edit) <name>\nPublish post\tab -p <name>\n')
+        'Alex Kyron\'s Blogging script. \nNew Post\tab -n (--new) <name>\nEdit post\tab -e (--edit) <name>\nPublish '
+        'post\tab -p <name>\n')
+
+
 def new_post(arg):
     name = arg;
     filename = fname(name)
-    f = open("./blog/blogcontent/" + filename + ".content.php", "w")
-    f.write("## [" + name + "](/blog/"+filename+".php)")
+    f = open(f"./blog/blogcontent/{filename}.content.php", "w")
+    f.write(f"## [{name}](/blog/{filename}.php)")
     f.close()
-    os.system("vim ./blog/blogcontent/"+filename+".content.php")
+    os.system(f"vim ./blog/blogcontent/{filename}content.php")
+
+
 def publish(arg):
     name = arg;
     filename = fname(name)
-    if path.exists("./blog/blogcontent/" + filename + ".content.php"):
-        f = open("./blog/" + filename + ".php", "w");
+    if path.exists(f"./blog/blogcontent/{filename}.content.php"):
+        f = open(f"./blog/{filename}.php", "w");
         f.write(
-            "<?php include('blogheader.php');\ninclude('./blogcontent/" + filename + ".content.php');\ninclude('blogfooter.php');?>")
+            f"<?php include('blogheader.php');\ninclude('./blogcontent/{filename}.content.php');\ninclude('blogfooter.php');?>")
         f.close();
         insert_string = """
                         <div id='left-content'>
@@ -93,8 +101,9 @@ def publish(arg):
         print("The blog post you are attempting to publish does not exist.")
         exit();
 
+
 def fname(name):
-    return name.replace(' ', '-').replace('\'','').replace('"','').lower()
+    return name.replace(' ', '-').replace('\'', '').replace('"', '').lower()
 
 
 if __name__ == "__main__":
