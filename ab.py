@@ -1,6 +1,6 @@
 import sys, getopt, subprocess, pdb
 from os import path
-
+import os
 match_string = "<!--ab-->"
 
 def main(argv):
@@ -19,7 +19,8 @@ def main(argv):
             publish(arg)
         elif opt in ('e','--edit'):
             filename = fname(arg)
-            subprocess.call("vim ./blog/blogcontent/" + filename + ".content.php")
+            os.system("vim ./blog/blogcontent/"+filename+".content.php")
+
 
 def help():
     print(
@@ -27,10 +28,10 @@ def help():
 def new_post(arg):
     name = arg;
     filename = fname(name)
-    f = open("./blog/blogcontent/" + filename + "-content.php", "w")
+    f = open("./blog/blogcontent/" + filename + ".content.php", "w")
     f.write("## " + name)
     f.close()
-    subprocess.call("vim ./blog/blogcontent/" + filename + ".content.php")
+    os.system("vim ./blog/blogcontent/"+filename+".content.php")
 def publish(arg):
     name = arg;
     filename = fname(name)
@@ -43,7 +44,8 @@ def publish(arg):
                         <div id='left-content'>
                             <div class='entry'>
                                 <div id = 'content'>
-                                    <?php include './blog/blogcontent/""" + filename + """.content.php';?>
+<?php include './blog/blogcontent/""" + filename + """.content.php';?>
+                                    <br>
                                     <small>
                                     <?php
                                         $filename = './blog/""" + filename + """.php';
@@ -76,7 +78,7 @@ def publish(arg):
                                                             }
                                                         ?>&ndash; <a href="blog/""" + filename + """.php">""" + name + """</a></li>
                                             """
-        with open("./blog-index.php", 'r+') as fd:
+        with open("./blog_index.php", 'r+') as fd:
             contents = fd.readlines()
             if match_string in contents[-1]:
                 contents.append(insert_string)
