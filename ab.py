@@ -122,7 +122,7 @@ def publish(arg):
                                         <br>
                                         <small>
                                         <?php
-                                            $filename = '""" + blog_path + filename + """.php';
+                                            $filename = '""" + blog_path +"/"+ filename + """.php';
                                             if(file_exists($filename)) {
                                                 echo date("F d Y H:i:s.", filectime($filename));
                                             }
@@ -172,7 +172,7 @@ def publish(arg):
             rss_string = f"""
             <item>
                 <title>{name}</title>
-                <link>{url}/{fname}.php</link>
+                <link>{url}/{filename}.php</link>
                 <description>{rss_description}</description>
                 <author>{author}</author>
             </item>
