@@ -1,5 +1,7 @@
 # Alex Kyron's Blog Script
 Python blog script inspired by Luke Smith's lb (https://github.com/LukeSmithxyz/lb)
+# Example
+My blog at https://alexkyron.xyz/blog.php runs on this script. Give it a look! The rolling blog page, blog index page, RSS feed and individual blog post pages are all generated/updated by this script. I blog on there by simply SSHing into the VPS and running this script.
 ## How do I set it up?
 
 1. Change path variables to your equivalent directories as described in comments or create the folders
