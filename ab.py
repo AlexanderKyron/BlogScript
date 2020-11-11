@@ -32,7 +32,8 @@ import getopt
 import os
 import sys
 from os import path
-import twython
+
+import tweepy
 from bs4 import BeautifulSoup
 
 
@@ -204,19 +205,28 @@ def publish(arg):
                 contents = fd.readlines()
                 app_key = contents[0]
                 app_secret = contents[1]
-                bearer_token = contents[2]
-                callbackurl = contents[3]
-            twitter = Twython(app_key, app_secret)
-            auth = twitter.get_authentication_tokens(callback_url=callbackurl)
-            message = f"New blog post: {name} @ {url}/{filename}.php"
-            twitter.update_status(status=message)
-            with open(f"{blogcontent_path}/{filename}.content.php", 'r') as fd:
-                blog_content = fd.read()
-                soup = BeautifulSoup(blog_content)
-                for a in soup.find_all("tweet"):
-                    print("Tweeting: " + a.text)
-                    tweetedMessage = a.text + f" // From {url}/{filename}.php"
-                    twitter.update_status(status=tweetedMessage)
+                access_token = contents[2]
+                access_secret = contents[3]
+            auth = tweepy.OAuthHandler(app_key, app_secret)
+            auth.set_access_token(access_token, access_secret)
+
+            api = tweepy.API(auth)
+
+            try:
+                api.verify_credentials()
+                message = f"New blog post: {name} @ {url}/{filename}.php"
+                tweepy.update_status(status=message)
+                with open(f"{blogcontent_path}/{filename}.content.php", 'r') as fd:
+                    blog_content = fd.read()
+                    soup = BeautifulSoup(blog_content)
+                    for a in soup.find_all("tweet"):
+                        print("Tweeting: " + a.text)
+                        tweetedMessage = a.text + f" // From {url}/{filename}.php"
+                        tweepy.update_status(status=tweetedMessage)
+                print("Authentication OK")
+            except:
+                print("Error during authentication")
+
     else:
         print("The blog post you are attempting to publish does not exist.")
         exit()
