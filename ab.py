@@ -202,30 +202,36 @@ def publish(arg):
             bearer_token = ''
             callbackurl = ''
             with open(twitter_info_path, 'r+') as fd:
-                contents = fd.readlines()
+                contents = fd.read().splitlines()
                 app_key = contents[0]
                 app_secret = contents[1]
                 access_token = contents[2]
                 access_secret = contents[3]
+            print(app_key)
+            print(app_secret)
+            print(access_token)
+            print(access_secret)
             auth = tweepy.OAuthHandler(app_key, app_secret)
             auth.set_access_token(access_token, access_secret)
 
             api = tweepy.API(auth)
 
-            try:
-                api.verify_credentials()
-                message = f"New blog post: {name} @ {url}/{filename}.php"
-                tweepy.update_status(status=message)
-                with open(f"{blogcontent_path}/{filename}.content.php", 'r') as fd:
-                    blog_content = fd.read()
-                    soup = BeautifulSoup(blog_content)
-                    for a in soup.find_all("tweet"):
-                        print("Tweeting: " + a.text)
-                        tweetedMessage = a.text + f" // From {url}/{filename}.php"
-                        tweepy.update_status(status=tweetedMessage)
-                print("Authentication OK")
-            except:
-                print("Error during authentication")
+            
+            api.verify_credentials()
+            message = f"New blog post: {name} @ {url}/{filename}.php"
+            api.update_status(message)
+            print("Tweeted update")
+            with open(f"{blogcontent_path}/{filename}.content.php", 'r') as fd:
+                blog_content = fd.read()
+                soup = BeautifulSoup(blog_content)
+                for a in soup.find_all("tweet"):
+                    print("Tweeting: " + a.text)
+                    tweetedMessage = a.text + f" // From {url}/{filename}.php"
+                    api.update_status(tweetedMessage)
+                    print("Tweeted contents")
+            print("Authentication OK")
+          
+          
 
     else:
         print("The blog post you are attempting to publish does not exist.")
