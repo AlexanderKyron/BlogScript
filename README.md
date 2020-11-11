@@ -24,6 +24,9 @@ URLs).
 
 6. When done editing the post, run python3 ab.py -p <name> to publish your post. This will add a section to your
 rolling blog and a link to your index, and update your RSS feed automagically.
+  
+### If you're using tweeting
+If you're using the tweeting feature, make a file at the specified path. Line 1 is your api key, line 2 is your api secret, line 3 is your access token, line 4 is your access token secret. If not, just disable the twitter feature, there's a boolean for it alongside the other feature enable/disable booleans.
 
 #  Configuration
 Configuring this script is done through editing source code. The paths are all stored in clear variables at the top and 
