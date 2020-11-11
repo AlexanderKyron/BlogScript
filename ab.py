@@ -1,7 +1,7 @@
 ##############################
 #  Alex Kyron's Blog Script  #
 #  11/3/2020                 #
-#  ver. 1.1                  #
+#  ver. 1.2 11/10/2020       #
 #  License: MIT              #
 #  github.com/AlexanderKyron #
 ##############################
@@ -33,8 +33,14 @@ import os
 import sys
 from os import path
 
+import tweepy
+from bs4 import BeautifulSoup
+
+
 # GENERAL VARS
 # String to look for in files to insert the markup on the line after
+from twython import Twython
+
 match_string = "<!--ab-->"
 # Relative path to folder where finished blog pages are stored, relative to root
 blog_path = "./blog"
@@ -48,7 +54,7 @@ blogcontent_path_rel = "./blogcontent"
 blog_index_page = "./blog_index.php"
 # Relative path to rolling blog page
 blog_rolling_page = "./blog.php"
-
+twitter_info_path = "./restricted/twitter/apiKeys.txt"
 # POST SETTINGS
 markdown = True
 
@@ -64,6 +70,7 @@ rss_path = "./rss.xml"
 rolling_blog_enabled = True
 blog_index_enabled = True
 rss_enabled = True
+twitter_enabled = True
 
 
 def main(argv):
@@ -189,6 +196,43 @@ def publish(arg):
                             break
                 fd.seek(0)
                 fd.writelines(contents)
+        if twitter_enabled:
+            app_key = ''
+            app_secret = ''
+            bearer_token = ''
+            callbackurl = ''
+            with open(twitter_info_path, 'r+') as fd:
+                contents = fd.read().splitlines()
+                app_key = contents[0]
+                app_secret = contents[1]
+                access_token = contents[2]
+                access_secret = contents[3]
+            print(app_key)
+            print(app_secret)
+            print(access_token)
+            print(access_secret)
+            auth = tweepy.OAuthHandler(app_key, app_secret)
+            auth.set_access_token(access_token, access_secret)
+
+            api = tweepy.API(auth)
+
+            
+            api.verify_credentials()
+            message = f"New blog post: {name} @ {url}/{filename}.php"
+            api.update_status(message)
+            print("Tweeted update")
+            with open(f"{blogcontent_path}/{filename}.content.php", 'r') as fd:
+                blog_content = fd.read()
+                soup = BeautifulSoup(blog_content)
+                for a in soup.find_all("tweet"):
+                    print("Tweeting: " + a.text)
+                    tweetedMessage = a.text + f" // From {url}/{filename}.php"
+                    api.update_status(tweetedMessage)
+                    print("Tweeted contents")
+            print("Authentication OK")
+          
+          
+
     else:
         print("The blog post you are attempting to publish does not exist.")
         exit()
